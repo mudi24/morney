@@ -1,15 +1,13 @@
 <template>
-  <div>
-    money
-    <Nav></Nav>
-  </div>
+  <Layout>money</Layout>
 </template>
 
-<script>
+<script lang="ts">
 export default {
   name: "Money"
 };
 </script>
 
 <style lang="scss" scoped>
+
 </style>
