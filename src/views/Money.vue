@@ -7,6 +7,9 @@
         <li>住</li>
         <li>行</li>
       </ul>
+      <div class="new">
+        <button>新增标签</button>
+      </div>
     </div>
     <div>
       <label class="notes">
@@ -50,4 +53,31 @@ export default {
 
 <style lang="scss" scoped>
 @import "~@/assets/style/helper.scss";
+.tags {
+  font-size: 14px;
+  padding: 16px;
+  > .current {
+    display: flex;
+    > li {
+      $h: 24px;
+      background: #d9d9d9;
+      height: $h;
+      line-height: $h;
+      //border-radius:50% 默认是宽度的50%，这里应该是高度的50%
+      border-radius: $h/2;
+      padding: 0 16px;
+      margin-right: 12px;
+    }
+  }
+  > .new {
+    padding-top: 16px;
+    button {
+      background: transparent;
+      border: none;
+      color: #999;
+      border-bottom: 1px solid;
+      padding: 0 4px;
+    }
+  }
+}
 </style>

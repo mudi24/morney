@@ -16,7 +16,7 @@ ol {
 
 button,
 input {
-  font: inherit;
+  font: inherit; // 字体默认不会继承父元素的字体
 }
 
 :focus {
