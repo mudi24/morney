@@ -29,7 +29,7 @@ export default class NumberPad extends Vue {
   output: string = "0";
   inputContent(event: MouseEvent) {
     const button = event.target as HTMLButtonElement; //断言写法1
-    const input = button.textContent!; // 断言写法2
+    const input = button.textContent!; // 断言写法2 断言它不是null
     if (this.output.length === 16) {
       return;
     }
