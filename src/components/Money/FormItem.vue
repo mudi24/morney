@@ -3,7 +3,12 @@
     <label class="formItem">
       <span class="name">{{fieldName}}</span>
       <!-- :value="value" @input="$event.target.value" -->
-      <input type="text" :placeholder="placeholder" :value="value" @input="onValueChange" />
+      <input
+        type="text"
+        :placeholder="placeholder"
+        :value="value"
+        @input="onValueChange($event.target.value)"
+      />
     </label>
   </div>
 </template>
