@@ -9,6 +9,7 @@ type TagListModel = {
   create: (name: string) => 'success' | 'duplicated' | 'label cannot be empty'  // 联合类型
   update: (id: string, name: string) => 'success' | 'duplicated' | 'not found'
   save: () => void
+  remove: (id: string) => boolean
 }
 const tagListModel: TagListModel = {
   data: [],
@@ -43,6 +44,18 @@ const tagListModel: TagListModel = {
   },
   save() {
     window.localStorage.setItem(localStorageKeyName, JSON.stringify(this.data))
+  },
+  remove(id: string) {
+    let index = -1
+    for (let i = 0; i < this.data.length; i++) {
+      if (this.data[i].id === id) {
+        index = i
+        this.data.splice(index, 1)
+        this.save()
+        break
+      }
+    }
+    return true
   }
 }
 
