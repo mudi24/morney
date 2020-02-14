@@ -26,7 +26,6 @@ import FormItem from "@/components/Money/FormItem.vue";
 import Tags from "@/components/Money/Tags.vue";
 import { Component, Prop, Watch } from "vue-property-decorator";
 import recordListModel from "@/models/recordListModel.ts";
-import tagListModel from "@/models/tagListModel.ts";
 // const recordListModel = require("@/recordListModel.js").default;
 
 const recordList = recordListModel.fetch();
