@@ -24,8 +24,6 @@ export default class Notes extends Vue {
   selectedTags: string[] = [];
 
   toggle(tag: string) {
-    console.log(tag);
-
     const index = this.selectedTags.indexOf(tag);
     if (index >= 0) {
       this.selectedTags.splice(index, 1);
