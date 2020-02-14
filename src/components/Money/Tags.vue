@@ -7,7 +7,7 @@
       <li
         v-for="tag in dataSource"
         :key="tag.id"
-        @click="toggle(tag.name)"
+        @click="toggle(tag)"
         :class="{selected:selectedTags.indexOf(tag)>=0}"
       >{{tag.name}}</li>
     </ul>
@@ -24,6 +24,8 @@ export default class Notes extends Vue {
   selectedTags: string[] = [];
 
   toggle(tag: string) {
+    console.log(tag);
+
     const index = this.selectedTags.indexOf(tag);
     if (index >= 0) {
       this.selectedTags.splice(index, 1);
