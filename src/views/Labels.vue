@@ -29,15 +29,6 @@ export default class Labels extends Vue {
     if (name) {
       store.createTag(name);
     }
-    // if (name) {
-    //   try {
-    //     tagListModel.create(name);
-    //   } catch (error) {
-    //     if(error.message === 'duplicated'){
-    //       window.alert('标签名重复')
-    //     }
-    //   }
-    // }
   }
 }
 </script>

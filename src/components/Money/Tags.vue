@@ -21,7 +21,7 @@ import store from "@/store/index2";
 
 @Component
 export default class Notes extends Vue {
-  tagList = store.tagList;
+  tagList = store.fetchTags();
   selectedTags: string[] = [];
 
   toggle(tag: string) {
