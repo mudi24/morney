@@ -5,7 +5,12 @@
       <span class="title">编辑标签</span>
     </div>
     <div class="form-wrapper">
-      <FormItem :value="tag.name" @update:value="updateTag" field-name="标签名" placeholder="请输入标签名"></FormItem>
+      <FormItem
+        :value="currentTag.name"
+        @update:value="updateTag"
+        field-name="标签名"
+        placeholder="请输入标签名"
+      ></FormItem>
     </div>
     <div class="button-wrapper">
       <Button @click="remove">删除标签</Button>
@@ -23,7 +28,7 @@ import Button from "@/components/Button.vue";
   components: { FormItem, Button }
 })
 export default class EditLabel extends Vue {
-  get tag() {
+  get currentTag() {
     return this.$store.state.currentTag;
   }
   get tagList() {
@@ -32,7 +37,7 @@ export default class EditLabel extends Vue {
   created() {
     this.$store.commit("fetchTags");
     this.$store.commit("setCurrentTag", this.$route.params.id);
-    if (!this.tag) {
+    if (!this.currentTag) {
       this.$router.replace("/404");
     }
   }
@@ -42,14 +47,13 @@ export default class EditLabel extends Vue {
   updateTag(name: string) {
     console.log("sss");
 
-    if (this.tag) {
-      this.$store.commit("updateTag", { id: this.tag.id, name });
-      // store.updateTag(this.tag.id, name);
+    if (this.currentTag) {
+      this.$store.commit("updateTag", { id: this.currentTag.id, name });
     }
   }
   remove() {
-    if (this.tag) {
-      this.$store.commit("removeTag", this.tag.id);
+    if (this.currentTag) {
+      this.$store.commit("removeTag", this.currentTag.id);
     } else {
       window.alert("删除失败");
     }
