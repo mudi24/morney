@@ -63,7 +63,7 @@ export default class Money extends Vue {
 // if (version === "0.0.1") {
 //   // 数据库升级，数据迁移
 //   recordList.forEach(record => {
-//     record.createAt = new Date(2020, 0, 1);
+//     record.createdAt = new Date(2020, 0, 1);
 //   });
 //   // 保存数据
 //   window.localStorage.setItem("recordList", JSON.stringify(recordList));

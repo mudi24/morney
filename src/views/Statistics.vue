@@ -2,6 +2,14 @@
   <Layout>
     <Tabs class-prefix="type" :value.sync="type" :data-source="recordTypeList"></Tabs>
     <Tabs class-prefix="interval" :value.sync="interval" :data-source="intervalList"></Tabs>
+    <ol>
+      <li v-for="(group,index) in result" :key="index">
+        <h3>{{group.title}}</h3>
+        <ol>
+          <li v-for="item in group.items" :key="item.id">{{item.amount}} - {{item.createdAt}}</li>
+        </ol>
+      </li>
+    </ol>
   </Layout>
 </template>
 
@@ -20,20 +28,40 @@ export default class Statistics extends Vue {
   interval = "day";
   intervalList = intervalList;
   recordTypeList = recordTypeList;
+  get recordList() {
+    return (this.$store.state as RootState).recordList;
+  }
+  get result() {
+    const { recordList } = this;
+    type Items = RecordItem[];
+    type HashTableValue = { title: string; items: Items };
+    const hashTable: { [key: string]: HashTableValue } = {};
+    for (let i = 0; i < recordList.length; i++) {
+      const [date, time] = recordList[i].createdAt!.split("T");
+      hashTable[date] = hashTable[date] || { title: date, items: [] };
+      hashTable[date].items.push(recordList[i]);
+    }
+    return hashTable;
+  }
+  created() {
+    this.$store.commit("fetchRecords");
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-::v-deep .type-tabs-item {
-  background: white;
-  &.selected {
-    background: #c4c4c4;
-    &::after {
-      display: none;
+::v-deep {
+  .type-tabs-item {
+    background: white;
+    &.selected {
+      background: #c4c4c4;
+      &::after {
+        display: none;
+      }
     }
   }
-}
-::v-deep .interval-tabs-item {
-  height: 48px;
+  .interval-tabs-item {
+    height: 48px;
+  }
 }
 </style>
