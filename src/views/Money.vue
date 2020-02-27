@@ -35,7 +35,7 @@ export default class Money extends Vue {
     tags: [],
     notes: "",
     type: "-",
-    amount: 100
+    amount: 0
   };
   recordTypeList = recordTypeList;
   get recordList() {
