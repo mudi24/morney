@@ -1,15 +1,23 @@
 <template>
   <Layout>
-    <Tabs class-prefix="type" :value.sync="type" :data-source="recordTypeList"></Tabs>
-    <Tabs class-prefix="interval" :value.sync="interval" :data-source="intervalList"></Tabs>
+    <Tabs
+      class-prefix="type"
+      :value.sync="type"
+      :data-source="recordTypeList"
+    ></Tabs>
+    <Tabs
+      class-prefix="interval"
+      :value.sync="interval"
+      :data-source="intervalList"
+    ></Tabs>
     <ol>
-      <li v-for="(group,index) in result" :key="index">
-        <h3 class="title">{{group.title}}</h3>
+      <li v-for="(group, index) in result" :key="index">
+        <h3 class="title">{{ beautify(group.title) }}</h3>
         <ol>
           <li class="record" v-for="item in group.items" :key="item.id">
-            <span class="statistics-tags">{{item.tags[0].name}}</span>
-            <span class="statistics-notes">{{item.notes}}</span>
-            <span>￥{{item.amount}}</span>
+            <span class="statistics-tags">{{ item.tags[0].name }}</span>
+            <span class="statistics-notes">{{ item.notes }}</span>
+            <span>￥{{ item.amount }}</span>
           </li>
         </ol>
       </li>
@@ -23,6 +31,7 @@ import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
 import intervalList from "@/constants/intervalList";
 import recordTypeList from "@/constants/recordTypeList";
+import dayjs from "dayjs";
 
 @Component({
   components: { Tabs }
@@ -34,6 +43,21 @@ export default class Statistics extends Vue {
   recordTypeList = recordTypeList;
   tagString(tags: Tag[]) {
     return tags.length === 0 ? "无" : tags.join(",");
+  }
+  beautify(string: string) {
+    const day = dayjs(string);
+    const now = dayjs();
+    if (dayjs(string).isSame(new Date(), "day")) {
+      return "今天";
+    } else if (day.isSame(now.subtract(1, "day"), "day")) {
+      return "昨天";
+    } else if (day.isSame(now.subtract(2, "day"), "day")) {
+      return "前天";
+    } else if (day.isSame(now, "year")) {
+      return day.format("MM月D日");
+    } else {
+      return day.format("YYYY年MM月D日");
+    }
   }
   get recordList() {
     return (this.$store.state as RootState).recordList;
