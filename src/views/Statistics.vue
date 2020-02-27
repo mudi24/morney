@@ -1,7 +1,6 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :value.sync="type" :data-source="recordTypeList"></Tabs>
-    <Tabs class-prefix="interval" :value.sync="interval" :data-source="intervalList"></Tabs>
     <ol>
       <li v-for="(group, index) in groupedList" :key="index">
         <h3 class="title">
@@ -24,7 +23,6 @@
 import Vue from "vue";
 import { Component } from "vue-property-decorator";
 import Tabs from "@/components/Tabs.vue";
-import intervalList from "@/constants/intervalList";
 import recordTypeList from "@/constants/recordTypeList";
 import clone from "@/lib/clone";
 import dayjs from "dayjs";
@@ -35,7 +33,6 @@ import dayjs from "dayjs";
 export default class Statistics extends Vue {
   type = "-";
   interval = "day";
-  intervalList = intervalList;
   recordTypeList = recordTypeList;
   tagString(tags: Tag[]) {
     return tags.length === 0 ? "无" : tags.join(",");
