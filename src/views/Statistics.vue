@@ -1,7 +1,7 @@
 <template>
   <Layout>
     <Tabs class-prefix="type" :value.sync="type" :data-source="recordTypeList"></Tabs>
-    <ol>
+    <ol v-if="groupedList.length>0">
       <li v-for="(group, index) in groupedList" :key="index">
         <h3 class="title">
           {{ beautify(group.title) }}
@@ -9,13 +9,14 @@
         </h3>
         <ol>
           <li class="record" v-for="item in group.items" :key="item.id">
-            <span class="statistics-tags">{{ item.tags[0].name }}</span>
+            <span class="statistics-tags">{{ tagString(item.tags) }}</span>
             <span class="statistics-notes">{{ item.notes }}</span>
             <span>￥{{ item.amount }}</span>
           </li>
         </ol>
       </li>
     </ol>
+    <div v-else class="noResult">目前没有相关记录</div>
   </Layout>
 </template>
 
@@ -35,7 +36,11 @@ export default class Statistics extends Vue {
   interval = "day";
   recordTypeList = recordTypeList;
   tagString(tags: Tag[]) {
-    return tags.length === 0 ? "无" : tags.join(",");
+    if (tags.length === 0) {
+      return "无";
+    } else {
+      return tags.map(t => t.name).join("，");
+    }
   }
   beautify(string: string) {
     const day = dayjs(string);
@@ -65,6 +70,9 @@ export default class Statistics extends Vue {
       .sort(
         (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
       );
+    if (newList.length === 0) {
+      return [];
+    }
     type Result = {
       title: string;
       total?: number;
@@ -104,6 +112,10 @@ export default class Statistics extends Vue {
 </script>
 
 <style lang="scss" scoped>
+.noResult {
+  padding: 16px;
+  text-align: center;
+}
 ::v-deep {
   .type-tabs-item {
     background: #c4c4c4;
