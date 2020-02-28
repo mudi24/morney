@@ -89,7 +89,6 @@ export default class Statistics extends Vue {
         });
       }
     }
-    console.log(result);
 
     result.map(group => {
       group.total = group.items.reduce((sum, item) => {

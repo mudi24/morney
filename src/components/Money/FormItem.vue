@@ -2,7 +2,6 @@
   <div>
     <label class="formItem">
       <span class="name">{{fieldName}}</span>
-      <!-- :value="value" @input="$event.target.value" -->
       <input
         type="text"
         :placeholder="placeholder"
