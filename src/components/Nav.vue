@@ -39,6 +39,8 @@ nav {
   }
   > .item.selected {
     color: $color-highlight;
+    background: white;
+    box-shadow: 0 5px 40px -20px #546782;
   }
 }
 </style>
