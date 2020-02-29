@@ -30,7 +30,7 @@ export default class FormItem extends Vue {
 
 <style lang="scss" scoped>
 .formItem {
-  font-size: 14px;
+  font-size: 2vh;
   display: flex;
   align-items: center;
   padding-left: 16px;
@@ -38,7 +38,7 @@ export default class FormItem extends Vue {
     padding-right: 16px;
   }
   input {
-    height: 40px;
+    height: 7vh;
     flex-grow: 1;
     background: transparent;
     border: none;

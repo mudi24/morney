@@ -18,10 +18,16 @@ export default {
 .layout-wrapper {
   display: flex;
   flex-direction: column;
-  min-height: 100vh;
+  // min-height: 100vh;
+  // height: 100vh;
 }
 .content {
   overflow: auto;
   flex-grow: 1;
+  // min-height: 100vh;
+  height: 92vh;
+}
+nav {
+  height: 8vh;
 }
 </style>

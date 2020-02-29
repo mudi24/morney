@@ -44,17 +44,19 @@ export default class Notes extends mixins(TagHelper) {
 <style lang='scss' scoped>
 .tags {
   background: white;
-  font-size: 14px;
-  padding: 16px;
+  font-size: 2vh;
+  padding: 2.4vh;
   flex-grow: 1;
   display: flex;
   flex-direction: column-reverse;
   > .current {
+    max-height: 16vh;
     display: flex;
     flex-wrap: wrap;
     overflow: auto;
     > li {
-      $h: 24px;
+      // $h: 24px;
+      $h: 3.5vh;
       $bg: #d9d9d9;
       background: $bg;
       height: $h;
@@ -71,7 +73,7 @@ export default class Notes extends mixins(TagHelper) {
     }
   }
   > .new {
-    padding-top: 16px;
+    padding-top: 2.4vh;
     button {
       background: transparent;
       border: none;

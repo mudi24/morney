@@ -15,7 +15,7 @@
   flex-direction: column-reverse;
 }
 .notes {
-  padding: 12px 0;
+  padding: 1vh 0;
 }
 </style>
 <script lang="ts">
