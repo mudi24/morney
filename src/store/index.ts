@@ -12,6 +12,7 @@ const store = new Vuex.Store({
   state: {
     recordList: [],
     tagList: [],
+    selectedTags: [],
     currentTag: undefined,
     createRecordError: null,
     createTagError: null
@@ -51,7 +52,6 @@ const store = new Vuex.Store({
       const id = createId().toString()
       state.tagList.push({ id, name: name })
       store.commit('saveTags')
-      // window.alert("添加成功");
     },
     removeTag(state, id: string) {
       let index = -1
@@ -87,6 +87,17 @@ const store = new Vuex.Store({
     saveTags(state) {
       window.localStorage.setItem('tagList', JSON.stringify(state.tagList))
     },
+    toggleSelectedTag(state, tag) {
+      const index = state.selectedTags.indexOf(tag);
+      if (index >= 0) {
+        state.selectedTags.splice(index, 1);
+      } else {
+        state.selectedTags.push(tag);
+      }
+    },
+    removeSelectedTag(state) {
+      state.selectedTags = []
+    }
   },
 })
 

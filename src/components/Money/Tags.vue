@@ -22,21 +22,17 @@ import { mixins } from "vue-class-component";
 
 @Component
 export default class Notes extends mixins(TagHelper) {
-  selectedTags: string[] = [];
+  toggle(tag: string) {
+    this.$store.commit("toggleSelectedTag", tag);
+  }
+  get selectedTags() {
+    return this.$store.state.selectedTags;
+  }
   created() {
     this.$store.commit("fetchTags");
   }
   get tagList() {
     return this.$store.state.tagList;
-  }
-  toggle(tag: string) {
-    const index = this.selectedTags.indexOf(tag);
-    if (index >= 0) {
-      this.selectedTags.splice(index, 1);
-    } else {
-      this.selectedTags.push(tag);
-    }
-    this.$emit("update:value", this.selectedTags);
   }
 }
 </script>
