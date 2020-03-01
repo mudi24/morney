@@ -1,18 +1,16 @@
-<template >
+<template>
   <Layout class-prefix="labels">
-    <div>
-      <div class="tags" ref="tags">
-        <router-link :to="`/labels/edit/${tag.id}`" class="tag" v-for="tag in tags" :key="tag.id">
-          <span>{{tag.name}}</span>
-          <Icon name="right"></Icon>
-        </router-link>
-      </div>
-      <div class="createTag-wrapper">
-        <Button class="createTag" @click="createTag">新建标签</Button>
-      </div>
-      <div class="backTop-wrapper">
-        <Icon class="backTop" name="backtop" @click="goBackTop"></Icon>
-      </div>
+    <div class="tags" ref="tags">
+      <router-link :to="`/labels/edit/${tag.id}`" class="tag" v-for="tag in tags" :key="tag.id">
+        <span>{{tag.name}}</span>
+        <Icon name="right"></Icon>
+      </router-link>
+    </div>
+    <div class="createTag-wrapper">
+      <Button class="createTag" @click="createTag">新建标签</Button>
+    </div>
+    <div class="backTop-wrapper" :class="`${backTopToggle}`" @click="goBackTop">
+      <Icon class="backTop" name="backtop"></Icon>
     </div>
   </Layout>
 </template>
@@ -28,15 +26,35 @@ import TagHelper from "@/mixins/TagHelper";
   components: { Button }
 })
 export default class Labels extends mixins(TagHelper) {
+  backTopToggle = "hide";
   created() {
     this.$store.commit("fetchTags");
   }
   get tags() {
     return this.$store.state.tagList;
   }
+  toggleBackTop() {
+    if (this.$el.firstElementChild !== null) {
+      if (this.$el.firstElementChild.scrollTop > 0) {
+        this.backTopToggle = "show";
+      } else {
+        this.backTopToggle = "hide";
+      }
+    }
+  }
+  mounted() {
+    window.addEventListener("scroll", this.toggleBackTop, true);
+  }
   goBackTop() {
-    const labelsContent = document.getElementById("labels-content")!;
-    labelsContent.scroll({ top: 0, left: 0, behavior: "smooth" });
+    if (this.$el.firstElementChild !== null) {
+      if (this.$el.firstElementChild.scrollTop) {
+        this.$el.firstElementChild.scroll({
+          top: 0,
+          left: 0,
+          behavior: "smooth"
+        });
+      }
+    }
   }
 }
 </script>
@@ -82,6 +100,13 @@ export default class Labels extends mixins(TagHelper) {
     bottom: 18vh;
     right: 32px;
     background: gray;
+    transition: all 0.3s ease-in-out;
+    &.show {
+      visibility: visible;
+    }
+    &.hide {
+      visibility: hidden;
+    }
     .backTop {
       width: 24px;
       height: 24px;
