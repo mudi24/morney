@@ -50,7 +50,12 @@ export default class EditLabel extends Vue {
     }
   }
   remove() {
-    if (this.currentTag) {
+    const trueOrFalse = window.confirm(
+      `确定要删除标签 ${this.currentTag.name}吗？`
+    );
+    if (!trueOrFalse) {
+      return;
+    } else if (trueOrFalse && this.currentTag) {
       this.$store.commit("removeTag", this.currentTag.id);
     } else {
       window.alert("删除失败");
