@@ -52,10 +52,10 @@ export default class Money extends Vue {
     if (!this.record.tags || this.record.tags.length === 0) {
       return window.alert("请至少选择一个标签");
     }
-    console.log(this.$store.state.selectedTags);
     this.$store.commit("createRecord", this.record);
     if (this.$store.state.createRecordError === null) {
-      window.alert("已保存");
+      let type = this.record.type === "-" ? "支出" : "收入";
+      window.alert(`已保存一条${type}记录`);
     }
     this.record.notes = "";
     this.$store.commit("removeSelectedTag");

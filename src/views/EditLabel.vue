@@ -45,8 +45,6 @@ export default class EditLabel extends Vue {
     this.$router.back();
   }
   updateTag(name: string) {
-    console.log("sss");
-
     if (this.currentTag) {
       this.$store.commit("updateTag", { id: this.currentTag.id, name });
     }
