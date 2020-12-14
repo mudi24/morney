@@ -6,7 +6,7 @@
       :data-source="recordTypeList"
     ></Tabs>
     <div class="chart-wrapper">
-      <Chart :options="x" class="chart" ref="chartWrapper"></Chart>
+      <Chart :options="chartOptions" class="chart" ref="chartWrapper"></Chart>
     </div>
     <ol v-if="groupedList.length > 0">
       <li v-for="(group, index) in groupedList" :key="index">
@@ -66,9 +66,7 @@ export default class Statistics extends Vue {
       return day.format("YYYY年MM月D日");
     }
   }
-  get x() {
-    // this.recordList.map((r) => ({ createdAt: r.createdAt, amount: r.amount }));
-    // this.recordList.map((r) => _.pick(r, ["createdAt", "amount"]));
+  get keyValueList() {
     const today = new Date();
     const array = [];
 
@@ -78,22 +76,27 @@ export default class Statistics extends Vue {
         .format("YYYY-MM-DD");
       const found = _.find(this.recordList, { createdAt: date });
       array.push({
-        date: date,
+        key: date,
         value: found ? found.amount : 0,
       });
     }
     array.sort((a, b) => {
-      if (a.date > b.date) {
+      if (a.key > b.key) {
         return 1;
-      } else if (a.date === b.date) {
+      } else if (a.key === b.key) {
         return 0;
       } else {
         return -1;
       }
     });
-    console.log(array);
-    const keys = array.map((item) => item.date);
-    const values = array.map((item) => item.value);
+    return array;
+  }
+  get chartOptions() {
+    // this.recordList.map((r) => ({ createdAt: r.createdAt, amount: r.amount }));
+    // this.recordList.map((r) => _.pick(r, ["createdAt", "amount"]));
+
+    const keys = this.keyValueList.map((item) => item.key);
+    const values = this.keyValueList.map((item) => item.value);
     return {
       grid: {
         left: 0,
@@ -104,6 +107,11 @@ export default class Statistics extends Vue {
         data: keys,
         axisTick: { alignWidthLabel: true },
         axisLine: { lineStyle: { color: "#666" } },
+        axisLabel: {
+          formatter: function(value: string, index: number) {
+            return value.substr(5);
+          },
+        },
       },
       yAxis: {
         type: "value",
