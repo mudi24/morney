@@ -1,11 +1,18 @@
 <template>
   <Layout>
-    <Tabs class-prefix="type" :value.sync="type" :data-source="recordTypeList"></Tabs>
-    <ol v-if="groupedList.length>0">
+    <Tabs
+      class-prefix="type"
+      :value.sync="type"
+      :data-source="recordTypeList"
+    ></Tabs>
+    <div class="chart-wrapper">
+      <Chart :options="x" class="chart" ref="chartWrapper"></Chart>
+    </div>
+    <ol v-if="groupedList.length > 0">
       <li v-for="(group, index) in groupedList" :key="index">
         <h3 class="title">
           {{ beautify(group.title) }}
-          <span>￥{{group.total}}</span>
+          <span>￥{{ group.total }}</span>
         </h3>
         <ol>
           <li class="record" v-for="item in group.items" :key="item.id">
@@ -16,7 +23,7 @@
         </ol>
       </li>
     </ol>
-    <div v-else class="noResult">目前没有相关记录</div>
+    <!-- <div v-else class="noResult">目前没有相关记录</div> -->
   </Layout>
 </template>
 
@@ -27,9 +34,10 @@ import Tabs from "@/components/Tabs.vue";
 import recordTypeList from "@/constants/recordTypeList";
 import clone from "@/lib/clone";
 import dayjs from "dayjs";
+import Chart from "@/components/Chart.vue";
 
 @Component({
-  components: { Tabs }
+  components: { Tabs, Chart },
 })
 export default class Statistics extends Vue {
   type = "-";
@@ -39,7 +47,7 @@ export default class Statistics extends Vue {
     if (tags.length === 0) {
       return "无";
     } else {
-      return tags.map(t => t.name).join("，");
+      return tags.map((t) => t.name).join("，");
     }
   }
   beautify(string: string) {
@@ -57,6 +65,71 @@ export default class Statistics extends Vue {
       return day.format("YYYY年MM月D日");
     }
   }
+  get x() {
+    return {
+      grid: {
+        left: 0,
+        right: 0,
+      },
+      xAxis: {
+        type: "category",
+        boundaryGap: false,
+        axisTick: { alignWidthLabel: true },
+        axisLine: { lineStyle: { color: "green" } },
+      },
+      yAxis: {
+        type: "value",
+        boundaryGap: [0, "30%"],
+        show: false,
+      },
+      visualMap: {
+        type: "piecewise",
+        show: false,
+        dimension: 0,
+        seriesIndex: 0,
+        pieces: [
+          {
+            gt: 1,
+            lt: 3,
+            color: "rgba(0, 180, 0, 0.5)",
+          },
+          {
+            gt: 5,
+            lt: 7,
+            color: "rgba(0, 180, 0, 0.5)",
+          },
+        ],
+      },
+      series: [
+        {
+          type: "line",
+          symbol: "circle",
+          symbolSize: 12,
+          lineStyle: {
+            color: "red",
+            width: 5,
+          },
+          data: [
+            ["2019-10-10", 200],
+            ["2019-10-11", 400],
+            ["2019-10-12", 650],
+            ["2019-10-13", 500],
+            ["2019-10-14", 250],
+            ["2019-10-15", 300],
+            ["2019-10-16", 450],
+            ["2019-10-17", 300],
+            ["2019-10-18", 100],
+          ],
+        },
+      ],
+      tooltip: {
+        show: true,
+        triggerOn: "click",
+        position: "top",
+        formatter: "{c}",
+      },
+    };
+  }
   get recordList() {
     return (this.$store.state as RootState).recordList;
   }
@@ -66,7 +139,7 @@ export default class Statistics extends Vue {
       return [];
     }
     const newList = clone(recordList)
-      .filter(t => t.type === this.type)
+      .filter((t) => t.type === this.type)
       .sort(
         (a, b) => dayjs(b.createdAt).valueOf() - dayjs(a.createdAt).valueOf()
       );
@@ -81,8 +154,8 @@ export default class Statistics extends Vue {
     const result: Result = [
       {
         title: dayjs(newList[0].createdAt).format("YYYY-MM-DD"),
-        items: [newList[0]]
-      }
+        items: [newList[0]],
+      },
     ];
     for (let i = 1; i < newList.length; i++) {
       const current = newList[i];
@@ -93,12 +166,12 @@ export default class Statistics extends Vue {
       } else {
         result.push({
           title: dayjs(current.createdAt).format("YYYY-MM-DD"),
-          items: [current]
+          items: [current],
         });
       }
     }
 
-    result.map(group => {
+    result.map((group) => {
       group.total = group.items.reduce((sum, item) => {
         return sum + item.amount;
       }, 0);
@@ -107,6 +180,10 @@ export default class Statistics extends Vue {
   }
   created() {
     this.$store.commit("fetchRecords");
+  }
+  mounted() {
+    const div = this.$refs.chartWrapper as HTMLDivElement;
+    div.scrollLeft = div.scrollWidth;
   }
 }
 </script>
@@ -156,5 +233,14 @@ export default class Statistics extends Vue {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: wrap;
+}
+.chart {
+  width: 430%;
+  &-wrapper {
+    overflow: auto;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 }
 </style>
