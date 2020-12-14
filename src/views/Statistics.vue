@@ -35,6 +35,7 @@ import recordTypeList from "@/constants/recordTypeList";
 import clone from "@/lib/clone";
 import dayjs from "dayjs";
 import Chart from "@/components/Chart.vue";
+import _ from "lodash";
 
 @Component({
   components: { Tabs, Chart },
@@ -66,6 +67,33 @@ export default class Statistics extends Vue {
     }
   }
   get x() {
+    // this.recordList.map((r) => ({ createdAt: r.createdAt, amount: r.amount }));
+    // this.recordList.map((r) => _.pick(r, ["createdAt", "amount"]));
+    const today = new Date();
+    const array = [];
+
+    for (let i = 0; i < 29; i++) {
+      const date = dayjs(today)
+        .subtract(i, "day")
+        .format("YYYY-MM-DD");
+      const found = _.find(this.recordList, { createdAt: date });
+      array.push({
+        date: date,
+        value: found ? found.amount : 0,
+      });
+    }
+    array.sort((a, b) => {
+      if (a.date > b.date) {
+        return 1;
+      } else if (a.date === b.date) {
+        return 0;
+      } else {
+        return -1;
+      }
+    });
+    console.log(array);
+    const keys = array.map((item) => item.date);
+    const values = array.map((item) => item.value);
     return {
       grid: {
         left: 0,
@@ -73,53 +101,21 @@ export default class Statistics extends Vue {
       },
       xAxis: {
         type: "category",
-        boundaryGap: false,
+        data: keys,
         axisTick: { alignWidthLabel: true },
-        axisLine: { lineStyle: { color: "green" } },
+        axisLine: { lineStyle: { color: "#666" } },
       },
       yAxis: {
         type: "value",
-        boundaryGap: [0, "30%"],
         show: false,
-      },
-      visualMap: {
-        type: "piecewise",
-        show: false,
-        dimension: 0,
-        seriesIndex: 0,
-        pieces: [
-          {
-            gt: 1,
-            lt: 3,
-            color: "rgba(0, 180, 0, 0.5)",
-          },
-          {
-            gt: 5,
-            lt: 7,
-            color: "rgba(0, 180, 0, 0.5)",
-          },
-        ],
       },
       series: [
         {
           type: "line",
           symbol: "circle",
           symbolSize: 12,
-          lineStyle: {
-            color: "red",
-            width: 5,
-          },
-          data: [
-            ["2019-10-10", 200],
-            ["2019-10-11", 400],
-            ["2019-10-12", 650],
-            ["2019-10-13", 500],
-            ["2019-10-14", 250],
-            ["2019-10-15", 300],
-            ["2019-10-16", 450],
-            ["2019-10-17", 300],
-            ["2019-10-18", 100],
-          ],
+          itemStyle: { borderWidth: 1, color: "#666", borderColor: "#666" },
+          data: values,
         },
       ],
       tooltip: {
